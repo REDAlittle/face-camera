@@ -517,12 +517,24 @@
     return;
   }
 
+  /* ---------- remise à zéro complète ---------- */
+  function resetAll() {
+    t0 = Date.now(); store.set('fc-t0', t0); tick();
+    newRoom(); Object.keys(votes).forEach(function (q) { votes[q] = {}; });
+    drawQR(); connect();
+    $$('#check .li.on').forEach(function (li) { li.classList.remove('on'); });
+    $$('.deck6').forEach(function (d) { d.classList.remove('pick'); });
+    document.body.classList.remove('black', 'ov');
+    render(); go(0, { force: true }); broadcast();
+  }
+
   /* ---------- barre de navigation à l'écran ---------- */
   var nav = document.createElement('div'); nav.id = 'nav';
   nav.innerHTML = '<button id="nav-prev" aria-label="Page précédente"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>' +
     '<span id="nav-pos"></span>' +
     '<button id="nav-next" aria-label="Page suivante"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>' +
     '<i class="sep"></i>' +
+    '<button id="nav-reset" aria-label="Remettre à zéro" title="Remettre à zéro : retour au début, chrono et votes"><svg viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.4-5.7"/><path d="M4 4v4h4"/></svg><span>Confirmer ?</span></button>' +
     '<button id="nav-grid" aria-label="Plan général" title="Plan général (G)"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg></button>' +
     '<button id="nav-pres" aria-label="Vue présentatrice" title="Vue présentatrice (P)"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM8 20h8M12 16v4"/></svg></button>' +
     '<button id="nav-fs" aria-label="Plein écran" title="Plein écran (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>';
@@ -532,6 +544,13 @@
   $('#nav-prev').onclick = function () { prev(); };
   $('#nav-next').onclick = function () { next(); };
   $('#nav-grid').onclick = function () { toggleOv(); };
+  var resetArm = 0;
+  $('#nav-reset').onclick = function () {
+    var btn = this;
+    if (!resetArm) { btn.classList.add('arm'); resetArm = setTimeout(function () { btn.classList.remove('arm'); resetArm = 0; }, 3000); return; }
+    clearTimeout(resetArm); resetArm = 0; btn.classList.remove('arm');
+    resetAll();
+  };
   $('#nav-pres').onclick = function () { window.open(location.pathname + '?presenter', 'fc-presenter', 'width=1280,height=800'); };
   $('#nav-fs').onclick = function () { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {}); else document.exitFullscreen(); };
   var navT; function navShow() { document.body.classList.add('nav-on'); clearTimeout(navT); navT = setTimeout(function () { if (!nav.matches(':hover')) document.body.classList.remove('nav-on'); }, 3000); }

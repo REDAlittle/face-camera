@@ -663,3 +663,9 @@ body.reticle-on #nav,body.reticle-on #nav *,body.reticle-on .edge{cursor:pointer
 @media (hover:none){#reticle{display:none}}
 #fry .explain{display:flex;flex-direction:column;justify-content:center;padding-bottom:40px}
 #voix .ch{grid-template-columns:36px 1fr;gap:18px}
+
+/* bouton de remise à zéro : deux clics (le premier arme, le second confirme) */
+#nav #nav-reset{width:auto;min-width:44px;padding:0 11px;border-radius:999px;gap:8px;display:flex;align-items:center;transition:background .2s,color .2s}
+#nav #nav-reset span{display:none;font:600 13px Poppins;letter-spacing:.06em;white-space:nowrap}
+#nav #nav-reset.arm{background:var(--rec);color:#fff;padding:0 16px}
+#nav #nav-reset.arm span{display:inline}
