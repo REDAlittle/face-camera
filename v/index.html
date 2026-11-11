@@ -49,22 +49,60 @@ ol li:before{content:counter(r);position:absolute;left:16px;top:13px;width:24px;
 .code .btn{width:auto;margin:0;padding:0 22px}
 footer{margin-top:34px;display:flex;justify-content:space-between;align-items:center;color:var(--dim);font-size:12px}
 footer img{height:22px;opacity:.8}
+
+/* passe Awwwards : cadre viseur, lisibilité, zone du pouce, retour de vote */
+:root{--dim:#8A8387}
+.vf{position:fixed;inset:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));pointer-events:none;z-index:0}
+.vf i{position:absolute;width:22px;height:22px;border:2px solid rgba(243,241,238,.55)}
+.vf i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}.vf i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.vf i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}.vf i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+body{padding-left:22px;padding-right:22px;padding-top:max(26px,calc(env(safe-area-inset-top) + 16px));position:relative}
+header,h1,.lead,nav,main,footer,#join{position:relative;z-index:1}
+h1{font-size:44px;margin:28px 0 8px}
+h1 span{color:var(--blue)}
+.lead{font-size:15px;max-width:30em}
+nav{position:sticky;top:0;z-index:5;margin:22px -22px 20px;padding:12px 22px;background:linear-gradient(var(--bg) 75%,rgba(18,16,20,0))}
+nav button{font-size:14px;padding:11px 16px}
+.q{font-size:26px;letter-spacing:-.025em;line-height:1.18}
+.hint{font-size:14px}
+.opt{min-height:68px;font-size:19px;border-radius:16px}
+.opts.scale{gap:8px}
+.scale .opt{min-height:64px;font-size:24px;border-radius:14px}
+.opt.sel{box-shadow:0 0 0 4px rgba(47,123,240,.22)}
+.opt .tick{margin-left:auto;width:22px;height:22px;opacity:0;transform:scale(.4);transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1)}
+.opt.sel .tick{opacity:1;transform:none}
+.status{font-size:15px}
+#toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translate(-50%,140%);z-index:20;display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--bg);font:600 15px Poppins;padding:14px 20px;border-radius:999px;box-shadow:0 12px 30px rgba(0,0,0,.35);transition:transform .45s var(--ease);white-space:nowrap}
+#toast.on{transform:translate(-50%,0)}
+#toast.err{background:var(--rec);color:#fff}
+#toast i{width:9px;height:9px;border-radius:50%;background:var(--blue)}
+#toast.err i{background:#fff}
+pre{font-size:16px}
+ol li{font-size:16px}
+#join .code{flex-direction:column}
+.code input{min-height:72px;font-size:32px;text-align:center;letter-spacing:.35em;text-transform:uppercase}
+.code .btn{width:100%;min-height:60px}
+.code input::placeholder{color:var(--dim);letter-spacing:.2em}
+footer{margin-top:44px}
+footer img{height:24px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
+<div class="vf" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
 <header><span class="rec"><i></i>Face caméra</span><span id="room"></span></header>
-<h1>Votre vote,<br>en direct.</h1>
+<h1>Votre vote,<br><span>en direct.</span></h1>
 <p class="lead" id="lead">Choisissez l'onglet annoncé à l'écran, puis touchez votre réponse. Vous pouvez changer d'avis tant que la réponse n'est pas révélée.</p>
 
 <div id="join" hidden>
-  <div class="code"><input id="codeIn" maxlength="6" placeholder="code" autocomplete="off" autocapitalize="off"><button class="btn" id="codeBtn">Rejoindre</button></div>
+  <div class="code"><input id="codeIn" maxlength="6" placeholder="CODE" autocomplete="off" autocapitalize="off"><button class="btn" id="codeBtn">Rejoindre</button></div>
   <p class="hint">Le code s'affiche à l'écran, sous le QR code.</p>
 </div>
 
 <nav id="tabs" role="tablist"></nav>
 <main id="panels"></main>
 
+<div id="toast" role="status" aria-live="polite"><i></i><span></span></div>
 <footer><span>Club des Inspirées × GoPod</span><img src="../media/logo-blanc.png" alt="GoPod"></footer>
 
 <script src="../polls.js"></script>
@@ -75,6 +113,7 @@ footer img{height:22px;opacity:.8}
   var room = (h[0]||'').toLowerCase().replace(/[^a-z0-9]/g,'');
   var start = h[1] || null;
   var vid; try{ vid = localStorage.getItem('fc-voter'); if(!vid){ vid = Math.random().toString(36).slice(2,10); localStorage.setItem('fc-voter', vid);} }catch(e){ vid = Math.random().toString(36).slice(2,10); }
+  var toastT; function toast(msg, err){ var t=document.getElementById('toast'); t.querySelector('span').textContent=msg; t.classList.toggle('err',!!err); t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(function(){t.classList.remove('on');},2600); }
   var mine = {}; try{ mine = JSON.parse(localStorage.getItem('fc-mine-'+room)||'{}'); }catch(e){}
 
   var tabs = document.getElementById('tabs'), panels = document.getElementById('panels');
@@ -102,7 +141,7 @@ footer img{height:22px;opacity:.8}
     var c = P[k], p = addTab(k, c.tab);
     var html = '<p class="q">'+esc(c.question)+'</p>' + (c.hint?'<p class="hint">'+esc(c.hint)+'</p>':'') + '<div class="opts'+(c.scale?' scale':'')+'">';
     c.opts.forEach(function(o,i){
-      html += '<button class="opt" data-a="'+o+'">' + (c.scale ? esc(o) : '<b>'+esc(o.length>2?o[0]:o)+'</b>'+esc(c.labels?c.labels[i]:o)) + '</button>';
+      html += '<button class="opt" data-a="'+o+'">' + (c.scale ? esc(o) : '<b>'+esc(o.length>2?o[0]:o)+'</b>'+esc(c.labels?c.labels[i]:o)+'<svg class="tick" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>') + '</button>';
     });
     html += '</div><p class="status" aria-live="polite"></p>';
     p.innerHTML = html;
@@ -115,8 +154,8 @@ footer img{height:22px;opacity:.8}
         var a = b.dataset.a; mark(a); if(navigator.vibrate) navigator.vibrate(12);
         st.textContent = 'Envoi…'; st.className = 'status';
         send({q:k,a:a,v:vid}, 0, function(ok, msg){
-          if(ok){ mine[k]=a; try{localStorage.setItem('fc-mine-'+room, JSON.stringify(mine));}catch(e){} st.textContent='Vote envoyé ✓  Vous pouvez encore changer d’avis.'; st.className='status ok'; }
-          else { st.textContent = msg; st.className='status err'; }
+          if(ok){ mine[k]=a; try{localStorage.setItem('fc-mine-'+room, JSON.stringify(mine));}catch(e){} st.textContent='Vote envoyé ✓  Vous pouvez encore changer d’avis.'; st.className='status ok'; toast('Vote envoyé · '+(c.scale?a:(c.labels?c.labels[c.opts.indexOf(a)]:a))); }
+          else { st.textContent = msg; st.className='status err'; toast(msg.split(' (')[0].split('.')[0], true); }
         });
       };
     });
@@ -140,7 +179,7 @@ footer img{height:22px;opacity:.8}
   pp.innerHTML = '<p class="q">Votre prompt, prêt à l’emploi</p><p class="hint">Remplacez chaque [crochet] par du concret : un vrai métier, une vraie cliente.</p><pre>'+esc(FC.prompt).replace(/\[([^\]]+)\]/g,'<mark>[$1]</mark>')+'</pre><button class="btn" id="copy">Copier le prompt</button><p class="q" style="margin-top:30px;font-size:20px">Puis les 5 relances</p><ol>'+FC.relances.map(function(r){return '<li>« '+esc(r)+' »</li>';}).join('')+'</ol>';
   pp.querySelector('#copy').onclick = function(){
     var b=this, t=FC.prompt;
-    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent='Copié ✓'; },function(){
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent='Copié ✓'; toast('Prompt copié dans le presse-papiers'); },function(){
       var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); b.textContent='Copié ✓';}catch(e){} ta.remove();
     });
   };

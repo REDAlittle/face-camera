@@ -560,3 +560,106 @@ body.nav-on .edge:hover{opacity:1}
 body.presenter #nav,body.presenter .edge,body.ov .edge{display:none}
 /* chiffres en bleu */
 #avi .stat .n,#insp .p .n{color:var(--blue)}
+
+/* =========================================================
+   Passe Awwwards : lisibilité en projection, équilibre vertical,
+   rythme, détails (curseur viseur)
+   ========================================================= */
+:root{--dim:#8A8387}
+.src{font-size:18px}
+.lede{font-size:34px}
+/* corps de texte : 24 px minimum à 1920 (lisible au fond d'une salle) */
+#promesse .clip p,#avi .stat p,#insp .p p,#atelier .st p,#regard .tip p,#voix .ch p,#breath .ex p,#interview .role p,#cadre .lt p,#gopod .feat p,#style .lists li,#makeup .list div{font-size:24px;line-height:1.42}
+#promesse .tracks{margin-top:56px;gap:18px}
+#promesse .tr .clip{padding:30px 38px}
+#promesse .clip h3{font-size:44px}
+#promesse .prog{top:820px}
+#promesse .prog span{font-size:17px}
+/* méthode */
+#methode .track{height:140px}
+#methode .clipx .nm{font-size:32px}
+#methode .cards{top:620px}
+#methode .cards div{font-size:23px}
+#methode .cards b{font-size:27px}
+/* regard : on occupe toute la hauteur */
+#regard .lens{left:710px;top:300px;width:500px;height:500px}
+#regard .lens i:nth-child(2){inset:62px}#regard .lens i:nth-child(3){inset:138px}#regard .lens i:nth-child(4){inset:218px}
+#regard .tip{width:560px}
+#regard .tip h3{font-size:40px}
+#regard .t1,#regard .t2{top:330px}#regard .t3,#regard .t4{top:630px}
+#regard .astuce{top:860px;font-size:28px}
+/* voix : faders plus hauts */
+#voix .desk{top:340px}
+#voix .rail{height:390px}
+#voix .ch h3{font-size:34px}
+#voix .voss{top:800px;font-size:28px}
+/* vocal fry : leçons */
+#fry .lessons{margin-top:40px;gap:56px}
+#fry .lessons h3{font-size:44px}
+#fry .lessons p{font-size:25px}
+/* échauffement */
+#breath .circ{width:540px;height:540px;top:290px}
+#breath .ex h3{font-size:38px}
+/* interview */
+#interview .roles{top:430px}
+#interview .role{height:330px;padding:36px 38px}
+#interview .role h3{font-size:46px}
+#interview .rot{top:810px;font-size:28px}
+/* cartes questions */
+#cartes .deck6{top:330px;gap:22px}
+#cartes .qc{height:215px;padding:28px 32px}
+#cartes .qc p{font-size:32px}
+#cartes .grille{top:820px}
+#cartes .grille span{font-size:24px}
+/* CADRE */
+#cadre .lt{grid-template-columns:100px 320px 1fr;padding-top:16px}
+#cadre .lt h3{font-size:34px}
+#cadre .bad blockquote{font-size:44px}
+#cadre .bad p{font-size:24px}
+/* itérer */
+#iterer .left{width:520px}
+#iterer .left .t{font-size:64px}
+#iterer .b{font-size:27px}
+#iterer .gold{font-size:26px;width:480px;top:720px}
+/* quiz style */
+#qstyle .it{height:440px;padding:34px}
+#qstyle .it h3{font-size:42px}
+#qstyle .it .ver{font-size:24px}
+#qstyle .end{top:850px;font-size:34px}
+/* vrais coûts */
+#couts .row span{font-size:19px}
+#couts .tot b{font-size:52px}
+#couts .tot span{font-size:19px}
+/* GoPod */
+#gopod .feat h3{font-size:31px}
+/* résultats */
+#res .two{top:350px}
+#res .r .n{font-size:200px}
+#res .r p{font-size:25px}
+#res .end{top:860px;font-size:34px}
+/* checklist */
+#check .li{font-size:30px;padding:22px 0}
+#check .next{top:850px;font-size:34px}
+/* stylisme / make-up */
+#makeup .list div{grid-template-columns:290px 1fr;padding:19px 0}
+/* ouvertures de chapitre : les références deviennent une ligne d'étiquettes */
+.chap .refs{right:auto;left:120px;top:880px;flex-direction:row;align-items:center;gap:12px;flex-wrap:wrap;max-width:1500px}
+.chap .refs span{font-size:20px;padding:10px 18px}
+.chap .sub{top:790px}
+/* barre de navigation : la frise de progression s'efface quand la barre apparaît */
+body.nav-on #h-prog{opacity:0;transition:opacity .3s}
+#h-prog{transition:opacity .3s}
+/* curseur viseur : quatre coins qui font la mise au point au clic */
+#reticle{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;pointer-events:none;z-index:300;opacity:0;transition:opacity .25s,width .25s var(--ease),height .25s var(--ease),margin .25s var(--ease)}
+#reticle i{position:absolute;width:10px;height:10px;border:2px solid var(--ink)}
+#reticle i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}#reticle i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+#reticle i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}#reticle i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+body.nav-on #reticle{opacity:.9}
+body.reticle-on,body.reticle-on *{cursor:none!important}
+body.reticle-on #nav,body.reticle-on #nav *,body.reticle-on .edge{cursor:pointer!important}
+#reticle.hit{width:22px;height:22px;margin:-11px 0 0 -11px}
+#reticle.hit i{border-color:var(--blue)}
+#reticle.btn{opacity:0!important}
+@media (hover:none){#reticle{display:none}}
+#fry .explain{display:flex;flex-direction:column;justify-content:center;padding-bottom:40px}
+#voix .ch{grid-template-columns:36px 1fr;gap:18px}

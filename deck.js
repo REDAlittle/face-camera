@@ -544,6 +544,19 @@
     document.body.appendChild(z);
   });
 
+  /* ---------- curseur viseur ---------- */
+  if (matchMedia('(hover:hover)').matches && !RM) {
+    var ret = document.createElement('div'); ret.id = 'reticle'; ret.innerHTML = '<i></i><i></i><i></i><i></i>';
+    document.body.appendChild(ret); document.body.classList.add('reticle-on');
+    var rx = 0, ry = 0;
+    addEventListener('mousemove', function (e) {
+      rx = e.clientX; ry = e.clientY; ret.style.transform = 'translate3d(' + rx + 'px,' + ry + 'px,0)';
+      ret.classList.toggle('btn', !!e.target.closest('#nav,.edge,button,a,.timer,.qc,.li,iframe'));
+    });
+    addEventListener('mousedown', function () { ret.classList.add('hit'); });
+    addEventListener('mouseup', function () { setTimeout(function () { ret.classList.remove('hit'); }, 180); });
+  }
+
   /* ---------- plan général ---------- */
   var ov = $('#ov');
   slides.forEach(function (s, i) {
