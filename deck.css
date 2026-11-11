@@ -535,3 +535,28 @@ body.presenter #pres{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;padd
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:0s!important;transition-duration:0s!important}
 }
+
+/* étapes restantes dans le HUD */
+.sdots{display:inline-flex;gap:6px;margin-left:14px;vertical-align:middle}
+.sdots i{display:block;width:9px;height:9px;border-radius:50%;border:1.5px solid var(--mute)}
+.sdots i.on{background:var(--blue);border-color:var(--blue)}
+/* barre de navigation */
+#nav{position:fixed;left:50%;bottom:22px;transform:translate(-50%,16px);z-index:120;display:flex;align-items:center;gap:6px;padding:8px;background:rgba(13,11,14,.82);border:1px solid var(--line2);border-radius:999px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .35s var(--ease),transform .35s var(--ease)}
+body.nav-on #nav,#nav:hover{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#nav button{all:unset;cursor:pointer;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:var(--ink);transition:background .2s}
+#nav button:hover{background:rgba(243,241,238,.12)}
+#nav button:disabled{opacity:.3;cursor:default;background:none}
+#nav #nav-prev,#nav #nav-next{width:52px;height:52px;background:var(--ink);color:var(--bg)}
+#nav #nav-prev:hover,#nav #nav-next:hover{background:#fff}
+#nav #nav-prev:disabled,#nav #nav-next:disabled{background:var(--ink)}
+#nav svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+#nav-pos{min-width:120px;text-align:center;font-size:14px;letter-spacing:.12em;color:var(--mute);font-variant-numeric:tabular-nums}
+#nav-pos b{color:var(--ink);font-weight:600}
+#nav .sep{width:1px;height:26px;background:var(--line2);margin:0 4px}
+.edge{position:fixed;top:0;bottom:0;width:9vw;z-index:110;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .3s}
+.edge-l{left:0}.edge-r{right:0}
+body.nav-on .edge:hover{opacity:1}
+.edge svg{width:46px;height:46px;padding:10px;border-radius:50%;background:rgba(13,11,14,.7);fill:none;stroke:var(--ink);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+body.presenter #nav,body.presenter .edge,body.ov .edge{display:none}
+/* chiffres en bleu */
+#avi .stat .n,#insp .p .n{color:var(--blue)}

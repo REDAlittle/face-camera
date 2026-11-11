@@ -89,7 +89,13 @@
   function hud() {
     var s = slides[cur];
     $('#h-chap').innerHTML = '<b>' + CHAPS[+s.dataset.chap].split(' · ')[0] + '</b>' + (CHAPS[+s.dataset.chap].indexOf(' · ') > 0 ? ' · ' + CHAPS[+s.dataset.chap].split(' · ')[1] : '');
-    $('#h-plan').innerHTML = 'Plan <b>' + pad(cur + 1) + '</b> / ' + N;
+    var ms = maxStep(s), dots = '';
+    for (var d = 1; d <= ms; d++) dots += '<i class="' + (d <= step ? 'on' : '') + '"></i>';
+    $('#h-plan').innerHTML = 'Plan <b>' + pad(cur + 1) + '</b> / ' + N + (ms ? ' <span class="sdots">' + dots + '</span>' : '');
+    var nb = $('#nav-pos'); if (nb) nb.innerHTML = '<b>' + pad(cur + 1) + '</b> / ' + N + (ms ? ' <span class="sdots">' + dots + '</span>' : '');
+    var np = $('#nav-prev'), nn = $('#nav-next');
+    if (np) np.disabled = (cur === 0 && step === 0);
+    if (nn) nn.disabled = (cur === N - 1 && step >= ms);
     $$('i', prog).forEach(function (t, k) { t.classList.toggle('done', k < cur); t.classList.toggle('cur', k === cur); });
   }
 
@@ -98,7 +104,7 @@
   function fromVars(type) {
     switch (type) {
       case 'fade': return { autoAlpha: 0 };
-      case 'wipe': return { clipPath: 'inset(0 100% 0 0)' };
+      case 'wipe': return { clipPath: 'inset(0 100% 0 0)', autoAlpha: 1 };
       case 'rise': return { autoAlpha: 0, y: 90 };
       case 'phone': return { autoAlpha: 0, y: 260, rotation: 5 };
       case 'lens': return { autoAlpha: 0, scale: 0.6 };
@@ -108,7 +114,7 @@
     }
   }
   function toVars(type) {
-    if (type === 'wipe') return { clipPath: 'inset(0 0% 0 0)', duration: 1.0, ease: 'power4.inOut' };
+    if (type === 'wipe') return { clipPath: 'inset(0 0% 0 0)', autoAlpha: 1, duration: 1.0, ease: 'power4.inOut' };
     return { autoAlpha: 1, x: 0, y: 0, scale: 1, rotation: 0, duration: type === 'phone' ? 1.2 : 0.8, ease: E };
   }
   function show(el, delay, instant) {
@@ -140,7 +146,7 @@
     if (s.id === 'nadia') nadia(s, back ? n - 1 : n);
     if (s.id === 'fry') fry(s, back ? n - 1 : n, instant);
   }
-  var FRY_SRC = 'https://www.youtube-nocookie.com/embed/MjWS8hQk188?start=350&end=421&autoplay=1&rel=0&modestbranding=1&playsinline=1&cc_load_policy=1&hl=fr';
+  var FRY_SRC = 'https://www.youtube-nocookie.com/embed/MjWS8hQk188?start=354&end=421&autoplay=1&rel=0&modestbranding=1&playsinline=1&cc_load_policy=1&hl=fr';
   function fry(s, st, instant) {
     var p = $('.player', s), f = $('.frame', s);
     if (st >= 1 && st < 2 && !instant && !STILL) {
@@ -368,7 +374,7 @@
       step++;
       $$('[data-s="' + step + '"]', s).forEach(function (el) { if (el.dataset.a) show(el, 0); else gsap.set(el, { clearProps: 'opacity,visibility,transform,clipPath' }); });
       stepHooks(s, step, false, false);
-      broadcast();
+      hud(); broadcast();
     } else go(cur + 1);
   }
   function prev() {
@@ -377,7 +383,7 @@
     if (step > 0) {
       $$('[data-s="' + step + '"]', s).forEach(hide);
       stepHooks(s, step, true, true);
-      step--; broadcast();
+      step--; hud(); broadcast();
     } else if (cur > 0) go(cur - 1, { atEnd: true });
   }
 
@@ -510,6 +516,33 @@
     if (bc) bc.postMessage({ type: 'hello' });
     return;
   }
+
+  /* ---------- barre de navigation à l'écran ---------- */
+  var nav = document.createElement('div'); nav.id = 'nav';
+  nav.innerHTML = '<button id="nav-prev" aria-label="Page précédente"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>' +
+    '<span id="nav-pos"></span>' +
+    '<button id="nav-next" aria-label="Page suivante"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>' +
+    '<i class="sep"></i>' +
+    '<button id="nav-grid" aria-label="Plan général" title="Plan général (G)"><svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg></button>' +
+    '<button id="nav-pres" aria-label="Vue présentatrice" title="Vue présentatrice (P)"><svg viewBox="0 0 24 24"><path d="M3 5h18v11H3zM8 20h8M12 16v4"/></svg></button>' +
+    '<button id="nav-fs" aria-label="Plein écran" title="Plein écran (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>';
+  document.body.appendChild(nav);
+  function stop(e) { e.stopPropagation(); }
+  nav.addEventListener('click', stop);
+  $('#nav-prev').onclick = function () { prev(); };
+  $('#nav-next').onclick = function () { next(); };
+  $('#nav-grid').onclick = function () { toggleOv(); };
+  $('#nav-pres').onclick = function () { window.open(location.pathname + '?presenter', 'fc-presenter', 'width=1280,height=800'); };
+  $('#nav-fs').onclick = function () { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {}); else document.exitFullscreen(); };
+  var navT; function navShow() { document.body.classList.add('nav-on'); clearTimeout(navT); navT = setTimeout(function () { if (!nav.matches(':hover')) document.body.classList.remove('nav-on'); }, 3000); }
+  addEventListener('mousemove', navShow); addEventListener('touchstart', navShow, { passive: true }); navShow();
+  /* zones latérales cliquables avec flèches */
+  ['l', 'r'].forEach(function (side) {
+    var z = document.createElement('div'); z.className = 'edge edge-' + side;
+    z.innerHTML = '<svg viewBox="0 0 24 24"><path d="' + (side === 'l' ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7') + '"/></svg>';
+    z.addEventListener('click', function (e) { e.stopPropagation(); if (side === 'l') prev(); else next(); });
+    document.body.appendChild(z);
+  });
 
   /* ---------- plan général ---------- */
   var ov = $('#ov');
