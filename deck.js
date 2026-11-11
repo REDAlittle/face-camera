@@ -146,18 +146,80 @@
     if (s.id === 'nadia') nadia(s, back ? n - 1 : n);
     if (s.id === 'fry') fry(s, back ? n - 1 : n, instant);
   }
-  var FRY_SRC = 'https://www.youtube-nocookie.com/embed/MjWS8hQk188?start=354&end=421&autoplay=1&rel=0&modestbranding=1&playsinline=1&cc_load_policy=1&hl=fr';
-  function fry(s, st, instant) {
-    var p = $('.player', s), f = $('.frame', s);
-    if (st >= 1 && st < 2 && !instant && !STILL) {
-      if (!f.firstChild) f.innerHTML = '<iframe referrerpolicy="strict-origin-when-cross-origin" src="' + FRY_SRC + (params.has('mute') ? '&mute=1' : '') + '" title="Extrait ABC News : la voix d\u2019Elizabeth Holmes" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
-      p.classList.add('on'); gsap.set($('.poster', s), { autoAlpha: 0 });
-    } else if (st < 1 || st >= 2) {
-      f.innerHTML = ''; p.classList.remove('on'); gsap.set($('.poster', s), { autoAlpha: 1 });
+  /* Extrait Theranos : lecteur YouTube préchargé dès l'arrivée sur la slide,
+     lancé au clic 1. Démarrage avec le son ; si le navigateur le bloque,
+     la vidéo part en muet et un bouton « Activer le son » apparaît. */
+  var FRY = { id: 'MjWS8hQk188', start: 354, end: 421 }, fryP = null, fryReady = false, fryWant = false, fryChk = 0;
+  function ytAPI(cb) {
+    if (window.YT && YT.Player) return cb();
+    var prev = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () { if (prev) prev(); cb(); };
+    if (!document.getElementById('yt-api')) {
+      var t = document.createElement('script'); t.id = 'yt-api'; t.src = 'https://www.youtube.com/iframe_api'; document.head.appendChild(t);
     }
   }
-  H.fry = { enter: function (s) { fry(s, 0, true); }, leave: function (s) { fry(s, 0, true); } };
+  function fryLoad(s) {
+    if (STILL || fryP) return;
+    var f = $('.frame', s), host = document.createElement('div');
+    f.innerHTML = ''; f.appendChild(host);
+    ytAPI(function () {
+      if (fryP || slides[cur] !== s) return;
+      fryP = new YT.Player(host, {
+        host: 'https://www.youtube-nocookie.com', videoId: FRY.id, width: '100%', height: '100%',
+        playerVars: { start: FRY.start, end: FRY.end, autoplay: 0, controls: 1, rel: 0, modestbranding: 1, playsinline: 1, cc_load_policy: 1, hl: 'fr', iv_load_policy: 3, origin: location.origin },
+        events: {
+          onReady: function () { fryReady = true; fryP.mute(); fryP.cueVideoById({ videoId: FRY.id, startSeconds: FRY.start, endSeconds: FRY.end }); if (fryWant) fryPlay(s); },
+          onStateChange: function (e) { if (e.data === 1) $('.player', s).classList.add('playing'); }
+        }
+      });
+      var ifr = fryP.getIframe && fryP.getIframe();
+      if (ifr) { ifr.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen'); ifr.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin'); ifr.title = 'Extrait ABC News : la voix d’Elizabeth Holmes'; }
+    });
+  }
+  function fryPlay(s) {
+    fryWant = true;
+    if (!fryReady) return;
+    var p = $('.player', s), btn = $('.snd', s);
+    fryP.seekTo(FRY.start, true);
+    if (!params.has('mute')) { fryP.unMute(); fryP.setVolume(100); }
+    fryP.playVideo();
+    clearTimeout(fryChk);
+    fryChk = setTimeout(function () {
+      if (!fryWant || !fryP) return;
+      var st = fryP.getPlayerState();
+      if (st !== 1 && st !== 3) { fryP.mute(); fryP.playVideo(); btn.hidden = params.has('mute'); }
+      else if (fryP.isMuted() && !params.has('mute')) btn.hidden = false;
+    }, 1400);
+  }
+  function fryStop(s) {
+    fryWant = false; clearTimeout(fryChk);
+    var btn = $('.snd', s); if (btn) btn.hidden = true;
+    if (fryP && fryReady) { try { fryP.pauseVideo(); fryP.seekTo(FRY.start, true); } catch (e) {} }
+  }
+  function fryKill(s) {
+    fryStop(s);
+    if (fryP) { try { fryP.destroy(); } catch (e) {} }
+    fryP = null; fryReady = false; $('.frame', s).innerHTML = '';
+  }
+  function fry(s, st, instant) {
+    var p = $('.player', s);
+    if (st >= 1 && st < 2 && !instant && !STILL) {
+      fryLoad(s); p.classList.add('on'); gsap.to($('.poster', s), { autoAlpha: 0, duration: 0.3 });
+      fryPlay(s);
+    } else {
+      fryStop(s); p.classList.remove('on', 'playing'); gsap.set($('.poster', s), { autoAlpha: 1 });
+    }
+  }
+  H.fry = {
+    enter: function (s) { fry(s, 0, true); fryLoad(s); },
+    leave: function (s) { fry(s, 0, true); fryKill(s); }
+  };
   $('#fry .poster').addEventListener('click', function (e) { e.stopPropagation(); if (slides[cur].id === 'fry' && step === 0) next(); });
+  $('#fry .snd').addEventListener('click', function (e) {
+    e.stopPropagation();
+    if (fryP && fryReady) { fryP.unMute(); fryP.setVolume(100); fryP.playVideo(); }
+    this.hidden = true;
+  });
   function nadia(s, st) {
     $$('.ln', s).forEach(function (l) {
       var k = +l.dataset.line - 1;
