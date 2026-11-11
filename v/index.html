@@ -188,7 +188,11 @@ footer img{height:24px}
   pc.innerHTML = '<p class="q">Avant d’entrer en studio</p><ol class="check">'+FC.checklist.map(function(r){return '<li>'+esc(r)+'</li>';}).join('')+'</ol>';
   [].forEach.call(pc.querySelectorAll('li'),function(li){ li.onclick=function(){ li.classList.toggle('on'); }; });
 
-  select(start && (P[start]||start==='prompt'||start==='checklist') ? start : keys[0]);
+  // Inscription
+  var pi = addTab('inscription','Inscription');
+  pi.innerHTML = '<p class="q">Votre vidéo, à votre nom</p><p class="hint">Vos coordonnées et votre numéro de passage, à montrer à la caméra en début de prise.</p><a class="btn" href="../inscription/" style="display:flex;align-items:center;justify-content:center;text-decoration:none">Je m’inscris</a>';
+
+  select(start && (P[start]||start==='prompt'||start==='checklist'||start==='inscription') ? start : keys[0]);
 })();
 </script>
 </body>

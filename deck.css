@@ -169,6 +169,7 @@ body.relay-on .live i{background:var(--rec);animation:blink 1.6s steps(2) infini
 
 /* quiz 2 */
 #mythe blockquote{font-size:92px;font-weight:700;letter-spacing:-.045em;line-height:1;margin-top:34px;max-width:1450px}
+#mythe .cite{margin-top:26px;font-size:30px;font-weight:500;color:var(--mute);letter-spacing:-.005em}
 #mythe .vf{position:absolute;left:120px;right:620px;top:600px;display:grid;grid-template-columns:1fr 1fr;gap:22px}
 #mythe .vf .take{height:200px}
 #mythe .stamp{position:absolute;left:1150px;top:620px;border:5px solid var(--rec);color:var(--rec);font-size:56px;font-weight:800;letter-spacing:.02em;padding:10px 34px;transform:rotate(-8deg);opacity:0;text-transform:uppercase}
@@ -670,3 +671,15 @@ body.reticle-on #nav,body.reticle-on #nav *,body.reticle-on .edge{cursor:pointer
 #nav #nav-reset span{display:none;font:600 13px Poppins;letter-spacing:.06em;white-space:nowrap}
 #nav #nav-reset.arm{background:var(--rec);color:#fff;padding:0 16px}
 #nav #nav-reset.arm span{display:inline}
+
+/* inscription */
+#inscr .t{position:absolute;left:120px;top:270px;width:800px;font-size:128px;line-height:.92}
+#inscr .eyebrow{position:absolute;left:120px;top:230px}
+#inscr .steps{position:absolute;left:120px;top:600px;width:1200px;display:grid;gap:0}
+#inscr .st{display:grid;grid-template-columns:90px 1fr;align-items:baseline;padding:20px 0;border-top:1px solid var(--line);font-size:32px;font-weight:300}
+#inscr .st b{font-size:22px;font-weight:600;letter-spacing:.12em;color:var(--blue)}
+#inscr .st em{font-style:normal;font-weight:600;color:var(--ink)}
+#inscr .qr.big{position:absolute;right:140px;top:250px;flex-direction:column;align-items:flex-start;gap:26px}
+#inscr .qr.big .qbox{padding:20px;border-radius:14px}
+#inscr .qr.big .qtxt b{font-size:34px}
+#inscr .foot{position:absolute;left:120px;top:930px;font-size:24px;color:var(--mute)}

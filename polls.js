@@ -55,6 +55,7 @@ window.FC = {
     'Ma première phrase connue par cœur',
     'Ma cliente idéale en tête, avec un prénom',
     'Ma tenue validée, unie et mate',
+    'Mon numéro de passage prêt à montrer à la caméra',
     'Poudre, baume à lèvres, brosse',
     'De l’eau, et le téléphone en mode avion',
     'Trois respirations 4-4-6, un sourire, top !',

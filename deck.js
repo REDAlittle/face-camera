@@ -452,12 +452,12 @@
   function voteURL(key) { return new URL('v/', location.href.split('#')[0]).href + '#' + room + '.' + key; }
   function drawQR() {
     $$('[data-qr]').forEach(function (el) {
-      var url = voteURL(el.dataset.qr), qr = qrcode(0, 'M'); qr.addData(url); qr.make();
-      var n = qr.getModuleCount(), size = 176, cell = size / n, d = '';
+      var page = el.dataset.qrPage, url = page ? new URL(page, location.href.split('#')[0]).href : voteURL(el.dataset.qr), qr = qrcode(0, 'M'); qr.addData(url); qr.make();
+      var n = qr.getModuleCount(), size = +(el.dataset.qrSize || 176), cell = size / n, d = '';
       for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += 'M' + (c * cell).toFixed(2) + ' ' + (r * cell).toFixed(2) + 'h' + cell.toFixed(2) + 'v' + cell.toFixed(2) + 'h-' + cell.toFixed(2) + 'z';
       var short = url.replace(/^https?:\/\//, '').split('#')[0];
       el.innerHTML = '<div class="qbox"><svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><path fill="#121014" d="' + d + '"/></svg></div>' +
-        '<div class="qtxt">Scannez<br>code<b>' + room + '</b><small>' + short + '</small></div>';
+        (page ? '<div class="qtxt">Scannez<b>' + el.dataset.qrLabel + '</b><small>' + short + '</small></div>' : '<div class="qtxt">Scannez<br>code<b>' + room + '</b><small>' + short + '</small></div>');
     });
   }
 
