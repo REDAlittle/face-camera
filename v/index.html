@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#121014">
+<title>Face caméra · Vote</title>
+<style>
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-400-normal.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-500-normal.woff2) format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-600-normal.woff2) format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-800-normal.woff2) format('woff2');font-weight:800;font-display:swap}
+:root{--bg:#121014;--card:#1C191E;--ink:#F3F1EE;--mute:#A9A3A6;--dim:#6E676B;--line:rgba(243,241,238,.10);--blue:#2F7BF0;--rec:#F0443A;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif}
+body{min-height:100svh;padding:max(18px,env(safe-area-inset-top)) 16px calc(28px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.rec{display:flex;align-items:center;gap:8px;color:var(--ink)}.rec i{width:9px;height:9px;border-radius:50%;background:var(--rec);animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+h1{font-size:40px;font-weight:800;letter-spacing:-.045em;line-height:.95;margin:26px 0 6px}
+.lead{color:var(--mute);font-size:15px;line-height:1.5}
+nav{display:flex;gap:8px;overflow-x:auto;margin:22px -16px 18px;padding:0 16px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:none;border:1px solid var(--line);background:transparent;color:var(--mute);font:500 13px Poppins;letter-spacing:.04em;padding:10px 14px;border-radius:999px}
+nav button[aria-selected=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.panel{display:none}.panel.on{display:block;animation:in .5s var(--ease)}
+@keyframes in{from{opacity:0;transform:translateY(12px)}}
+.q{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.hint{color:var(--mute);font-size:13px;margin-top:8px}
+.opts{display:grid;gap:10px;margin-top:20px}
+.opts.scale{grid-template-columns:repeat(5,1fr)}
+.opt{display:flex;align-items:center;gap:14px;min-height:64px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 18px Poppins;letter-spacing:-.01em;padding:0 18px;border-radius:14px;text-align:left;transition:transform .15s var(--ease),background .25s,border-color .25s}
+.opt:active{transform:scale(.97)}
+.opt b{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(243,241,238,.25);display:grid;place-items:center;font-size:14px}
+.scale .opt{justify-content:center;padding:0;font-size:22px}
+.opt.sel{background:var(--blue);border-color:var(--blue)}.opt.sel b{border-color:#fff;background:#fff;color:var(--blue)}
+.status{min-height:22px;margin-top:16px;font-size:14px;color:var(--mute)}
+.status.ok{color:var(--ink)}.status.err{color:var(--rec)}
+pre{white-space:pre-wrap;font:400 15px/1.55 Poppins;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-top:16px}
+pre mark{background:rgba(47,123,240,.22);color:var(--ink);border-radius:4px;padding:0 3px}
+.btn{display:block;width:100%;margin-top:14px;min-height:56px;border:0;border-radius:14px;background:var(--ink);color:var(--bg);font:600 16px Poppins}
+ol{list-style:none;counter-reset:r;margin-top:16px;display:grid;gap:10px}
+ol li{counter-increment:r;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px 14px 52px;position:relative;font-size:15px;line-height:1.45}
+ol li:before{content:counter(r);position:absolute;left:16px;top:13px;width:24px;height:24px;border-radius:50%;background:var(--blue);display:grid;place-items:center;font-size:12px;font-weight:600}
+.check li{padding-left:56px;cursor:pointer}.check li:before{content:"";background:transparent;border:1.5px solid var(--mute);border-radius:7px}
+.check li.on{color:var(--mute);text-decoration:line-through}.check li.on:before{background:var(--blue);border-color:var(--blue)}
+.code{display:flex;gap:10px;margin-top:22px}
+.code input{flex:1;min-height:56px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:600 22px Poppins;letter-spacing:.2em;text-transform:lowercase;border-radius:14px;padding:0 16px}
+.code .btn{width:auto;margin:0;padding:0 22px}
+footer{margin-top:34px;display:flex;justify-content:space-between;align-items:center;color:var(--dim);font-size:12px}
+footer img{height:22px;opacity:.8}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header><span class="rec"><i></i>Face caméra</span><span id="room"></span></header>
+<h1>Votre vote,<br>en direct.</h1>
+<p class="lead" id="lead">Choisissez l'onglet annoncé à l'écran, puis touchez votre réponse. Vous pouvez changer d'avis tant que la réponse n'est pas révélée.</p>
+
+<div id="join" hidden>
+  <div class="code"><input id="codeIn" maxlength="6" placeholder="code" autocomplete="off" autocapitalize="off"><button class="btn" id="codeBtn">Rejoindre</button></div>
+  <p class="hint">Le code s'affiche à l'écran, sous le QR code.</p>
+</div>
+
+<nav id="tabs" role="tablist"></nav>
+<main id="panels"></main>
+
+<footer><span>Club des Inspirées × GoPod</span><img src="../media/logo-blanc.png" alt="GoPod"></footer>
+
+<script src="../polls.js"></script>
+<script>
+(function(){
+  var P = FC.polls, keys = Object.keys(P);
+  var h = location.hash.replace('#','').split('.');
+  var room = (h[0]||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+  var start = h[1] || null;
+  var vid; try{ vid = localStorage.getItem('fc-voter'); if(!vid){ vid = Math.random().toString(36).slice(2,10); localStorage.setItem('fc-voter', vid);} }catch(e){ vid = Math.random().toString(36).slice(2,10); }
+  var mine = {}; try{ mine = JSON.parse(localStorage.getItem('fc-mine-'+room)||'{}'); }catch(e){}
+
+  var tabs = document.getElementById('tabs'), panels = document.getElementById('panels');
+  function esc(s){ return String(s).replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];}); }
+
+  function addTab(id, label){
+    var b = document.createElement('button'); b.textContent = label; b.setAttribute('role','tab'); b.dataset.id = id;
+    b.onclick = function(){ select(id); history.replaceState(null,'','#'+room+'.'+id); };
+    tabs.appendChild(b);
+    var p = document.createElement('section'); p.className = 'panel'; p.id = 'p-'+id; panels.appendChild(p); return p;
+  }
+  function select(id){
+    [].forEach.call(tabs.children,function(b){ b.setAttribute('aria-selected', b.dataset.id===id); if(b.dataset.id===id) b.scrollIntoView({inline:'center',block:'nearest'}); });
+    [].forEach.call(panels.children,function(p){ p.classList.toggle('on', p.id==='p-'+id); });
+  }
+
+  if(!room){
+    document.getElementById('join').hidden = false;
+    document.getElementById('codeBtn').onclick = function(){ var c = document.getElementById('codeIn').value.trim().toLowerCase(); if(c){ location.hash = c; location.reload(); } };
+  } else {
+    document.getElementById('room').textContent = 'Salle ' + room;
+  }
+
+  keys.forEach(function(k){
+    var c = P[k], p = addTab(k, c.tab);
+    var html = '<p class="q">'+esc(c.question)+'</p>' + (c.hint?'<p class="hint">'+esc(c.hint)+'</p>':'') + '<div class="opts'+(c.scale?' scale':'')+'">';
+    c.opts.forEach(function(o,i){
+      html += '<button class="opt" data-a="'+o+'">' + (c.scale ? esc(o) : '<b>'+esc(o.length>2?o[0]:o)+'</b>'+esc(c.labels?c.labels[i]:o)) + '</button>';
+    });
+    html += '</div><p class="status" aria-live="polite"></p>';
+    p.innerHTML = html;
+    var st = p.querySelector('.status');
+    function mark(a){ [].forEach.call(p.querySelectorAll('.opt'),function(b){ b.classList.toggle('sel', b.dataset.a===a); }); }
+    if(mine[k]) { mark(mine[k]); st.textContent = 'Votre vote est enregistré.'; st.className='status ok'; }
+    [].forEach.call(p.querySelectorAll('.opt'),function(b){
+      b.onclick = function(){
+        if(!room){ st.textContent = 'Entrez d’abord le code affiché à l’écran.'; st.className='status err'; return; }
+        var a = b.dataset.a; mark(a); if(navigator.vibrate) navigator.vibrate(12);
+        st.textContent = 'Envoi…'; st.className = 'status';
+        send({q:k,a:a,v:vid}, 0, function(ok, msg){
+          if(ok){ mine[k]=a; try{localStorage.setItem('fc-mine-'+room, JSON.stringify(mine));}catch(e){} st.textContent='Vote envoyé ✓  Vous pouvez encore changer d’avis.'; st.className='status ok'; }
+          else { st.textContent = msg; st.className='status err'; }
+        });
+      };
+    });
+  });
+
+  function send(obj, attempt, cb){
+    fetch(FC.relay + FC.topic(room), {method:'POST', body: JSON.stringify(obj)})
+      .then(function(r){
+        if(r.ok) return cb(true);
+        if(r.status===429 && attempt<4) { cb(false,'Beaucoup de votes en même temps, nouvel essai…'); return setTimeout(function(){ send(obj, attempt+1, cb); }, 2500*(attempt+1)); }
+        cb(false,'Le vote n’est pas passé (erreur '+r.status+'). Touchez à nouveau votre réponse.');
+      })
+      .catch(function(){
+        if(attempt<3) return setTimeout(function(){ send(obj, attempt+1, cb); }, 1500*(attempt+1));
+        cb(false,'Pas de connexion. Vérifiez le réseau puis touchez à nouveau votre réponse.');
+      });
+  }
+
+  // Le prompt CADRE à copier
+  var pp = addTab('prompt','Prompt CADRE');
+  pp.innerHTML = '<p class="q">Votre prompt, prêt à l’emploi</p><p class="hint">Remplacez chaque [crochet] par du concret : un vrai métier, une vraie cliente.</p><pre>'+esc(FC.prompt).replace(/\[([^\]]+)\]/g,'<mark>[$1]</mark>')+'</pre><button class="btn" id="copy">Copier le prompt</button><p class="q" style="margin-top:30px;font-size:20px">Puis les 5 relances</p><ol>'+FC.relances.map(function(r){return '<li>« '+esc(r)+' »</li>';}).join('')+'</ol>';
+  pp.querySelector('#copy').onclick = function(){
+    var b=this, t=FC.prompt;
+    (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ b.textContent='Copié ✓'; },function(){
+      var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy'); b.textContent='Copié ✓';}catch(e){} ta.remove();
+    });
+  };
+  // Checklist
+  var pc = addTab('checklist','Checklist studio');
+  pc.innerHTML = '<p class="q">Avant d’entrer en studio</p><ol class="check">'+FC.checklist.map(function(r){return '<li>'+esc(r)+'</li>';}).join('')+'</ol>';
+  [].forEach.call(pc.querySelectorAll('li'),function(li){ li.onclick=function(){ li.classList.toggle('on'); }; });
+
+  select(start && (P[start]||start==='prompt'||start==='checklist') ? start : keys[0]);
+})();
+</script>
+</body>
+</html>
