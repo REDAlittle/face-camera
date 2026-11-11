@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#121014">
+<meta name="robots" content="noindex">
+<title>GoPod Studios · Liens</title>
+<style>
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-400-normal.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-500-normal.woff2) format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-600-normal.woff2) format('woff2');font-weight:600;font-display:swap}
+@font-face{font-family:Poppins;src:url(../fonts/poppins-latin-800-normal.woff2) format('woff2');font-weight:800;font-display:swap}
+:root{--bg:#121014;--card:#1C191E;--card2:#232026;--ink:#F3F1EE;--mute:#A9A3A6;--dim:#8A8387;--line:rgba(243,241,238,.10);--blue:#2F7BF0;--rec:#F0443A;--ease:cubic-bezier(.16,1,.3,1);--filet:linear-gradient(90deg,#20C0C8 0%,#1080C8 45%,#3030A0 75%,#B050A0 100%)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif}
+body{min-height:100svh;padding:max(26px,calc(env(safe-area-inset-top) + 16px)) 22px calc(28px + env(safe-area-inset-bottom));position:relative}
+.vf{position:fixed;inset:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom));pointer-events:none;z-index:0}
+.vf i{position:absolute;width:22px;height:22px;border:2px solid rgba(243,241,238,.55)}
+.vf i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}.vf i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.vf i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}.vf i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+main,header,footer{position:relative;z-index:1;max-width:560px}
+header{display:flex;align-items:center;justify-content:space-between;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:500}
+.rec{display:flex;align-items:center;gap:8px;color:var(--ink)}.rec i{width:9px;height:9px;border-radius:50%;background:var(--rec);animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.brand{margin-top:34px;display:block;height:40px;width:auto}
+.filet{display:block;width:84px;height:3px;background:var(--filet);margin:26px 0 0}
+h1{font-size:44px;font-weight:800;letter-spacing:-.045em;line-height:.95;margin:18px 0 12px}
+h1 span{color:var(--blue)}
+.lead{color:var(--mute);font-size:15px;line-height:1.5}
+.lbl{font-size:12px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin:30px 0 12px 2px}
+.links{display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+.lk{display:flex;align-items:center;gap:16px;min-height:76px;padding:14px 18px;border:1px solid var(--line);background:var(--card);border-radius:16px;color:var(--ink);text-decoration:none;transition:background .25s var(--ease),border-color .25s,transform .15s var(--ease);opacity:0;animation:in .7s var(--ease) forwards}
+.lk:nth-child(1){animation-delay:.08s}.lk:nth-child(2){animation-delay:.14s}.lk:nth-child(3){animation-delay:.2s}.lk:nth-child(4){animation-delay:.26s}.lk:nth-child(5){animation-delay:.32s}
+@keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.lk:active{transform:scale(.985)}
+@media (hover:hover){.lk:hover{background:var(--card2);border-color:rgba(243,241,238,.18)}.lk:hover .go{transform:translateX(3px);color:var(--ink)}}
+.lk .tag{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:13px;font-weight:600;letter-spacing:.06em;background:rgba(47,123,240,.14);color:var(--blue)}
+.lk .tx{flex:1;min-width:0}
+.lk b{display:block;font-size:17px;font-weight:600;letter-spacing:-.01em}
+.lk small{display:block;font-size:13px;color:var(--mute);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lk .go{flex:none;color:var(--dim);font-size:20px;transition:transform .25s var(--ease),color .25s}
+.lk.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.lk.main small{color:#5d575b}.lk.main .go{color:var(--bg)}
+.lk.main .tag{background:var(--bg);color:var(--ink)}
+@media (hover:hover){.lk.main:hover{background:#fff}.lk.main:hover .go{color:var(--bg)}}
+.promo{margin-top:12px;border:1px solid rgba(47,123,240,.45);background:linear-gradient(180deg,rgba(47,123,240,.10),rgba(47,123,240,.03));border-radius:16px;padding:18px}
+.promo p{font-size:14px;line-height:1.5;color:var(--ink)}
+.promo p span{color:var(--mute)}
+.code{margin-top:14px;display:flex;gap:10px}
+.code output{flex:1;min-height:56px;display:grid;place-items:center;border:2px dashed var(--blue);border-radius:12px;font-size:22px;font-weight:700;letter-spacing:.2em;color:var(--blue)}
+.code button{flex:none;min-height:56px;padding:0 20px;border:0;border-radius:12px;background:var(--blue);color:#fff;font:600 15px Poppins;transition:transform .15s var(--ease)}
+.code button:active{transform:scale(.97)}
+.addr{margin-top:12px;display:block;font-size:14px;line-height:1.55;color:var(--mute);text-decoration:none;border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.addr b{display:block;color:var(--ink);font-weight:600;font-size:15px;margin-bottom:2px}
+.addr em{font-style:normal;color:var(--blue);font-size:13px;font-weight:500;display:block;margin-top:6px}
+footer{margin-top:40px;display:flex;justify-content:space-between;align-items:center;color:var(--dim);font-size:12px}
+footer img{height:22px;width:auto}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);font-size:14px;font-weight:600;padding:12px 18px;border-radius:999px;opacity:0;transition:opacity .25s,transform .35s var(--ease);z-index:5;pointer-events:none}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.lk{animation:none;opacity:1}.rec i{animation:none}}
+</style>
+</head>
+<body>
+<div class="vf" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<header><span class="rec"><i></i>GoPod Studios</span><span>Liens</span></header>
+<main>
+  <img class="brand" src="../media/logo-blanc.png" alt="GoPod">
+  <span class="filet" aria-hidden="true"></span>
+  <h1>Merci.<br><span>On reste en lien.</span></h1>
+  <p class="lead">Retrouvez nos conseils face caméra et les coulisses du studio chaque semaine.</p>
+
+  <p class="lbl">Nos réseaux</p>
+  <nav class="links">
+    <a class="lk" href="https://www.instagram.com/gopodstudios/" target="_blank" rel="noopener"><span class="tag">IG</span><span class="tx"><b>Instagram</b><small>@gopodstudios</small></span><span class="go" aria-hidden="true">→</span></a>
+    <a class="lk" href="https://www.tiktok.com/@gopodstudios" target="_blank" rel="noopener"><span class="tag">TT</span><span class="tx"><b>TikTok</b><small>@gopodstudios</small></span><span class="go" aria-hidden="true">→</span></a>
+    <a class="lk" href="https://www.linkedin.com/company/gopod-studio-contenu/" target="_blank" rel="noopener"><span class="tag">IN</span><span class="tx"><b>LinkedIn</b><small>GoPod – Studio &amp; Hub de contenu</small></span><span class="go" aria-hidden="true">→</span></a>
+    <a class="lk" href="https://gopod.fr" target="_blank" rel="noopener"><span class="tag">WEB</span><span class="tx"><b>Notre site</b><small>gopod.fr</small></span><span class="go" aria-hidden="true">→</span></a>
+    <a class="lk main" href="https://gopod.fr/dashboard/book" target="_blank" rel="noopener"><span class="tag">REC</span><span class="tx"><b>Réserver une session</b><small>Studio à Saint-Herblain</small></span><span class="go" aria-hidden="true">→</span></a>
+  </nav>
+
+  <div class="promo">
+    <p>Club des Inspirées · <b>−20 % sur votre prochaine session</b><br><span>Indiquez ce code à la réservation.</span></p>
+    <div class="code"><output id="code">INSPIREES</output><button type="button" id="copy">Copier</button></div>
+  </div>
+
+  <a class="addr" href="https://www.google.com/maps/search/?api=1&amp;query=GoPod%20Studios%204%20rue%20Edith%20Piaf%2044800%20Saint-Herblain" target="_blank" rel="noopener"><b>GoPod Studios</b>Euptouyou, bâtiment Asturia<br>4 rue Édith Piaf, 44800 Saint-Herblain<em>Ouvrir l’itinéraire →</em></a>
+</main>
+<footer><span>Club des Inspirées × GoPod</span><img src="../media/logo-blanc.png" alt=""></footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var t = document.getElementById('toast'), tm;
+  function toast(m){ t.textContent = m; t.classList.add('on'); clearTimeout(tm); tm = setTimeout(function(){ t.classList.remove('on'); }, 1800); }
+  document.getElementById('copy').onclick = function(){
+    var b = this, code = 'INSPIREES';
+    function ok(){ b.textContent = 'Copié ✓'; toast('Code INSPIREES copié'); if(navigator.vibrate) navigator.vibrate(15); }
+    (navigator.clipboard ? navigator.clipboard.writeText(code) : Promise.reject()).then(ok, function(){
+      var ta = document.createElement('textarea'); ta.value = code; ta.setAttribute('readonly',''); ta.style.position='absolute'; ta.style.left='-9999px';
+      document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); ok(); }catch(e){} ta.remove();
+    });
+  };
+})();
+</script>
+</body>
+</html>

@@ -349,7 +349,7 @@
 
   H.final = {
     enter: function (s, instant) {
-      var cd = $('[data-cd]', s), h2 = $('h2', s), rest = [h2, $('.sub', s), $('.addr', s)];
+      var cd = $('[data-cd]', s), h2 = $('h2', s), rest = [h2, $('.sub', s), $('.addr', s), $('.qr', s)];
       if (instant || STILL) { gsap.set(cd, { autoAlpha: 0 }); gsap.set(rest, { autoAlpha: 1 }); return; }
       gsap.set(rest, { autoAlpha: 0 }); gsap.set(cd, { autoAlpha: 1 });
       var tl = gsap.timeline({ delay: 0.6 });
@@ -519,7 +519,7 @@
       for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (qr.isDark(r, c)) d += 'M' + (c * cell).toFixed(2) + ' ' + (r * cell).toFixed(2) + 'h' + cell.toFixed(2) + 'v' + cell.toFixed(2) + 'h-' + cell.toFixed(2) + 'z';
       var short = url.replace(/^https?:\/\//, '').split('#')[0];
       el.innerHTML = '<div class="qbox"><svg width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '"><path fill="#121014" d="' + d + '"/></svg></div>' +
-        (page ? '<div class="qtxt">Scannez<b>' + el.dataset.qrLabel + '</b><small>' + short + '</small></div>' : '<div class="qtxt">Scannez<br>code<b>' + room + '</b><small>' + short + '</small></div>');
+        (page ? '<div class="qtxt">Scannez<b>' + el.dataset.qrLabel + '</b>' + (el.dataset.qrSub ? '<i>' + el.dataset.qrSub + '</i>' : '') + '<small>' + short + '</small></div>' : '<div class="qtxt">Scannez<br>code<b>' + room + '</b><small>' + short + '</small></div>');
     });
   }
 

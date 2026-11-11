@@ -501,9 +501,12 @@ body.relay-on .live i{background:var(--rec);animation:blink 1.6s steps(2) infini
 #final{padding:0}
 #final .bg-img{opacity:.35}
 #final .cd{position:absolute;inset:0;display:grid;place-items:center;font-size:520px;font-weight:800;letter-spacing:-.08em;line-height:1}
-#final h2{position:absolute;left:112px;top:470px;font-size:190px;font-weight:800;letter-spacing:-.05em;line-height:.9;opacity:0}
-#final .sub{position:absolute;left:120px;top:700px;font-size:40px;font-weight:300;color:var(--ink2);opacity:0}
-#final .addr{position:absolute;left:120px;top:800px;font-size:20px;letter-spacing:.06em;color:var(--mute);opacity:0}
+#final h2{position:absolute;left:112px;top:300px;font-size:190px;font-weight:800;letter-spacing:-.05em;line-height:.9;opacity:0}
+#final .sub{position:absolute;left:120px;top:520px;font-size:40px;font-weight:300;color:var(--ink2);opacity:0}
+#final .qr.links{position:absolute;left:120px;top:690px;opacity:0;gap:30px}
+#final .qr.links .qtxt small{font-size:15px}
+#final .qr.links .qtxt i{display:block;font-style:normal;font-size:19px;letter-spacing:.02em;text-transform:none;color:var(--ink2);margin-top:2px}
+#final .addr{position:absolute;left:120px;top:604px;font-size:20px;letter-spacing:.06em;color:var(--mute);opacity:0}
 
 /* Overview (G) */
 #ov{position:fixed;inset:0;z-index:200;background:rgba(13,11,14,.97);display:none;overflow:auto;padding:40px}
