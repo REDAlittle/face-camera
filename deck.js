@@ -138,7 +138,20 @@
       else gsap.fromTo(st, { autoAlpha: 0, scale: 2.4, rotation: -2 }, { autoAlpha: 1, scale: 1, rotation: -8, duration: 0.45, ease: 'back.out(2)' });
     });
     if (s.id === 'nadia') nadia(s, back ? n - 1 : n);
+    if (s.id === 'fry') fry(s, back ? n - 1 : n, instant);
   }
+  var FRY_SRC = 'https://www.youtube-nocookie.com/embed/MjWS8hQk188?start=350&end=421&autoplay=1&rel=0&modestbranding=1&playsinline=1&cc_load_policy=1&hl=fr';
+  function fry(s, st, instant) {
+    var p = $('.player', s), f = $('.frame', s);
+    if (st >= 1 && st < 2 && !instant && !STILL) {
+      if (!f.firstChild) f.innerHTML = '<iframe referrerpolicy="strict-origin-when-cross-origin" src="' + FRY_SRC + (params.has('mute') ? '&mute=1' : '') + '" title="Extrait ABC News : la voix d\u2019Elizabeth Holmes" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+      p.classList.add('on'); gsap.set($('.poster', s), { autoAlpha: 0 });
+    } else if (st < 1 || st >= 2) {
+      f.innerHTML = ''; p.classList.remove('on'); gsap.set($('.poster', s), { autoAlpha: 1 });
+    }
+  }
+  H.fry = { enter: function (s) { fry(s, 0, true); }, leave: function (s) { fry(s, 0, true); } };
+  $('#fry .poster').addEventListener('click', function (e) { e.stopPropagation(); if (slides[cur].id === 'fry' && step === 0) next(); });
   function nadia(s, st) {
     $$('.ln', s).forEach(function (l) {
       var k = +l.dataset.line - 1;
