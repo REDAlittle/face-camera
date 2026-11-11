@@ -467,6 +467,7 @@ body.relay-on .live i{background:var(--rec);animation:blink 1.6s steps(2) infini
 #gopod .feat p{font-size:19px;color:var(--mute);margin-top:10px;line-height:1.45}
 #gopod .offer{position:absolute;left:120px;top:850px;display:flex;align-items:center;gap:26px}
 #gopod .offer span{font-size:24px;font-weight:600;background:var(--ink);color:var(--bg);padding:14px 24px}
+#gopod .offer .code{font-size:30px;font-weight:700;letter-spacing:.16em;color:var(--blue);border:2px solid var(--blue);padding:10px 22px}
 #gopod .offer a{font-size:24px;color:var(--ink);text-decoration:none;letter-spacing:.04em}
 
 /* résultats */

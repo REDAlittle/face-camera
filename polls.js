@@ -57,6 +57,7 @@ window.FC = {
     'Ma tenue validée, unie et mate',
     'Poudre, baume à lèvres, brosse',
     'De l’eau, et le téléphone en mode avion',
-    'Trois respirations 4-4-6, un sourire, top !'
+    'Trois respirations 4-4-6, un sourire, top !',
+    'Mon code INSPIREES : −20 % sur ma prochaine session GoPod'
   ]
 };
